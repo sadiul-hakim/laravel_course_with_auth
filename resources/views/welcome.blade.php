@@ -11,16 +11,10 @@
 
 <body>
     {{-- @class, @style, @selected, @checked, @disabled,@method('PUT'), @csrf, @include --}}
-    <div>
-        @auth
-            <a href="/dashboard">Dashboard</a>
-            <a href="/profile">Profile</a>
-        @endauth
-        @guest
-            <a href="/login">Login</a>
-            <a href="/register">Register</a>
-        @endguest
-    </div>
+    @php
+        $dynamicMessage = 'Dynamic Message';
+    @endphp
+    <x-navbar :dynamicMessage="$dynamicMessage" staticMessage = "staticMessage" />
     @php
         $users = ['Hakim', 'Rakib', 'Hassan', 'Ashik'];
     @endphp
