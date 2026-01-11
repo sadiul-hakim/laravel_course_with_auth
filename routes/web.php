@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
 
@@ -10,7 +12,8 @@ Route::get('/name/{name?}', function (string $name=null) {
 }) -> where(['name'=>'[a-zA-Z]+']);
 
 
-
+// auth is a built-in middleware for authentication. It protects the protected routes. It redirects to GET /login router if not authenticated/
+// Laravel looks to GET /login route if user is not authenticated and redirects.
 Route::middleware("auth") -> group(function(){
     Route::get("/profile",function(){
         return view("profile");
@@ -20,7 +23,16 @@ Route::middleware("auth") -> group(function(){
 Route::view("/login","login") -> name("login");
 Route::view("/register","register") -> name("register");
 
+Route::get("/hash/{text}",function (string $text){
+    $encrypted = Crypt::encryptString($text);
+    dump($encrypted);
+    dump(Crypt::decryptString($encrypted));
+    dump(bcrypt($text));
 
+    $hashed = Hash::make($text);
+    dump($hashed);
+    dump(Hash::check($text,$hashed));
+});
 
 Route::get("/test-rate-limiter",function(){
     $executed = RateLimiter::attempt("send-message",5,function(){
