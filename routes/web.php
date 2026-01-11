@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\InvokableController;
 use App\Http\Controllers\TestController;
+use App\Models\User;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
@@ -13,6 +14,9 @@ Route::get('/name/{name?}', function (string $name=null) {
     return view('welcome',['name'=>$name]);
 }) -> where(['name'=>'[a-zA-Z]+']);
 
+// Route::get("/user/{key:name}",function(User $user){ // implicit parameter
+
+// });
 
 // auth is a built-in middleware for authentication. It protects the protected routes. It redirects to GET /login router if not authenticated/
 // Laravel looks to GET /login route if user is not authenticated and redirects.
@@ -55,7 +59,8 @@ Route::get("/unsubscribe",function(){
 })->name("unsubscribe") -> middleware("signed");
 
 // Route::resource('test', TestController::class); // use resource controller for most CRUD operations, it's clean
-Route::resource('test', TestController::class)->only(["index","show"]);
+// Route::resource('test.common', TestController::class);// Nested /test/{test}/common/{common}
+Route::resource('test.common', TestController::class)->only(["index","show"]);
 Route::apiResource('test', TestController::class); // without create, edit routes
 Route::resource('test', TestController::class)->except(["create","store","update","destroy"]);
 
