@@ -14,7 +14,13 @@
     @php
         $dynamicMessage = 'Dynamic Message';
     @endphp
-    <x-navbar :dynamicMessage="$dynamicMessage" staticMessage = "staticMessage" />
+    {{-- <x-navbar :dynamicMessage="$dynamicMessage" staticMessage = "staticMessage" /> --}}
+    <x-navbar />
+    <x-class-component>
+        <x-slot:title>
+            <h1>Home Page</h1>
+        </x-slot:title>
+    </x-class-component>
     @php
         $users = ['Hakim', 'Rakib', 'Hassan', 'Ashik'];
     @endphp

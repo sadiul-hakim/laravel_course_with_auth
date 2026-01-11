@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Views\Composers\TestComposer;
+use App\View\Composers\TestComposer;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;

@@ -8,11 +8,15 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
 
-Route::redirect('/', '/name');
+// Route::redirect('/', '/name');
 
-Route::get('/name/{name?}', function (?string $name = null) {
-    return view('welcome', ['name' => $name]);
-})->where(['name' => '[a-zA-Z]+']);
+// Route::get('/name/{name?}', function (?string $name = null) {
+//     return view('welcome', ['name' => $name]);
+// })->where(['name' => '[a-zA-Z]+']);
+
+Route::get('/', function () {
+    return view('welcome');
+});
 
 // Route::get("/user/{key:name}",function(User $user){ // implicit parameter
 
