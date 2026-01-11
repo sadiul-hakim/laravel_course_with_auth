@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect("/","/name");
@@ -21,7 +22,16 @@ Route::view("/register","register") -> name("register");
 
 
 
+Route::get("/test-rate-limiter",function(){
+    $executed = RateLimiter::attempt("send-message",5,function(){
+        return "Sending Mail";
+    });
 
+    dump($executed);
+    if(!$executed){
+        return "Too Many Messages";
+    }
+});
 
 
 // Singed Route, user does not need to be logged in to access this. Suppose Unsubscribe from mail etc.
