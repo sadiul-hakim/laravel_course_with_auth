@@ -25,6 +25,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Route::pattern("id","[0-9]+");
         RateLimiter::for("rate_limit",function(Request $request){
+            // return $request -> user() && $request -> user() -> id === 100 ? Limit::none() : Limit::perMinute(2) -> by($request -> user());
             return Limit::perMinute(5) -> by($request -> user() ? $request -> user() : $request -> ip());
         });
     }
