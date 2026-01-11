@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\InvokableController;
 use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
@@ -53,10 +54,13 @@ Route::get("/unsubscribe",function(){
     // http://127.0.0.1:8000/unsubscribe?expires=1768106993&user=1&signature=be9eaf7d26188ddde7af4a2ea69c885e48970be4e2f9243a38467fa5e9efe00d
 })->name("unsubscribe") -> middleware("signed");
 
-// Route::resource('test', TestController::class);
+// Route::resource('test', TestController::class); // use resource controller for most CRUD operations, it's clean
 Route::resource('test', TestController::class)->only(["index","show"]);
 Route::apiResource('test', TestController::class); // without create, edit routes
 Route::resource('test', TestController::class)->except(["create","store","update","destroy"]);
+
+// single action controller
+Route::get("/invoke",InvokableController::class); // No need to provide method name. __invoke method would be called.
 
 Route::fallback(function(){
     return view('not_found');
