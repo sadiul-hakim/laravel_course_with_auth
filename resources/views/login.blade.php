@@ -9,7 +9,7 @@
 </head>
 
 <body>
-    <form action="#" method="post">
+    <form action="/login" method="post">
         @csrf
         <fieldset>
             <legend>Login Please</legend>

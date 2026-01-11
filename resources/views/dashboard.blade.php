@@ -1,4 +1,4 @@
 <div>
-    <h1>Profile</h1>
+    Dashboard
     <p>{{ $test_key }}</p>
 </div>
