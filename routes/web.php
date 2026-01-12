@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\InvokableController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\SQLMonitoringController;
 use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
@@ -37,7 +38,6 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
     Route::view('/login', 'login')->name('login');
     Route::view('/register', 'register')->name('register');
-
 });
 
 Route::get('/hash/{text}', function (string $text) {
@@ -76,6 +76,24 @@ Route::resource('test', TestController::class)->except(['create', 'store', 'upda
 
 // single action controller
 Route::get('/invoke', InvokableController::class); // No need to provide method name. __invoke method would be called.
+
+Route::get('/monitor-sql', [SQLMonitoringController::class, 'monitor']);
+
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+
+if (app()->environment('local')) { // only in dev
+    DB::listen(function ($query) {
+        // Format query with bindings
+        $sql = str_replace(
+            array_map(fn($k) => '?', $query->bindings),
+            array_map(fn($b) => "'{$b}'", $query->bindings),
+            $query->sql
+        );
+
+        Log::info("[SQL] {$sql} ({$query->time} ms)");
+    });
+}
 
 Route::fallback(function () {
     return view('not_found');
