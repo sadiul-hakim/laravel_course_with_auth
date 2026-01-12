@@ -2,8 +2,11 @@
 
 namespace App\Providers;
 
+use App\Http\Controllers\PaymentController;
+use App\Services\PayoneerPaymentService;
 use App\View\Composers\TestComposer;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
@@ -18,7 +21,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(PaymentController::class, PayoneerPaymentService::class);
+        //     $this->app->when(PaymentController::class)
+        //         ->needs(PaymentService::class)
+        //         ->give(PayoneerPaymentService::class);
     }
 
     /**

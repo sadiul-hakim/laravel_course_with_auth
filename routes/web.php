@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\InvokableController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
@@ -29,6 +30,7 @@ Route::middleware('auth')->group(function () {
         return view('profile');
     })->middleware('throttle:rate_limit');
     Route::view('/dashboard', 'dashboard');
+    Route::get('/pay', [PaymentController::class, 'pay']);
 });
 
 Route::middleware('guest')->group(function () {
