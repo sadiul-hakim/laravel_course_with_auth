@@ -22,6 +22,7 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(PaymentController::class, PayoneerPaymentService::class);
+        // $this->app->singleton(PaymentController::class, PayoneerPaymentService::class);
         //     $this->app->when(PaymentController::class)
         //         ->needs(PaymentService::class)
         //         ->give(PayoneerPaymentService::class);
