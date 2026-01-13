@@ -8,6 +8,7 @@ use App\Http\Controllers\SQLMonitoringController;
 use App\Http\Controllers\TestController;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
@@ -20,6 +21,9 @@ use Illuminate\Support\Facades\Route;
 // })->where(['name' => '[a-zA-Z]+']);
 
 Route::get('/', function (Request $request) {
+    config(['app.timezone' => 'Asia/Dhaka']);
+    dump(config("app.timezone"));
+    dump(App::environment());
     return view('welcome');
 });
 
