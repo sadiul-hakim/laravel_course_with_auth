@@ -37,6 +37,18 @@ Route::get("/response/{user?}", function (Request $request, User $user) {
     return redirect()->action([PaymentController::class, "pay"]);
 })->name('response');
 
+Route::get("/session", function (Request $request) {
+    $request->session()->put("cartItem", 100);
+    dump($request->session());
+    dump($request->session()->get("cartItem"));
+    dump($request->session()->pull("cartItem", 0));
+    // $request->session()->forget("cartItem");
+    dump($request->session());
+    $request->session()->flush();
+    dump($request->session()->has("cartItem"));
+    dump($request->session()->exists("cartItem"));
+    dump($request->session());
+});
 Route::get("/download", function () {
     // dump(public_path("storage/uploads/H09l4XpFeXD7UaXvrvXloYu7FcyULZAooQhGjxo1.png"));
     return response()->download(
