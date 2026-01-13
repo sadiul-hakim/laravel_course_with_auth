@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\View as IlluminateView;
 
+// Service Providers are executed every time a request is sent
 class AppServiceProvider extends ServiceProvider
 {
     /**

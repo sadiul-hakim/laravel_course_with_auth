@@ -3,8 +3,11 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\InvokableController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SQLMonitoringController;
 use App\Http\Controllers\TestController;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
@@ -16,8 +19,34 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome', ['name' => $name]);
 // })->where(['name' => '[a-zA-Z]+']);
 
-Route::get('/', function () {
+Route::get('/', function (Request $request) {
     return view('welcome');
+});
+
+Route::get("/response/{user?}", function (Request $request, User $user) {
+    // return ['user'=>'adam'];
+    // return $user;
+    // return response()->json(['name' => 'hakim']);
+    // return response("Hi")->cookie('name', 'Hakim');
+    // return response("Hi")->withoutCookie('name');
+    // return response("Hi", 200)->header('Content-Type', 'text/plain');
+
+    // return redirect()->away('https://www.google.com');
+    // return redirect()->route("profile");
+    // return redirect()->action([PaymentController::class, "pay"]);
+    return redirect()->action([PaymentController::class, "pay"]);
+})->name('response');
+
+Route::get("/download", function () {
+    // dump(public_path("storage/uploads/H09l4XpFeXD7UaXvrvXloYu7FcyULZAooQhGjxo1.png"));
+    return response()->download(
+        public_path("storage/uploads/H09l4XpFeXD7UaXvrvXloYu7FcyULZAooQhGjxo1.png"),
+        "image.png",
+        [
+            'Content-Type' => 'application/octet-stream',
+            'Content-Disposition' => 'attachment; filename="image.png"',
+        ]
+    );
 });
 
 // Route::get("/user/{key:name}",function(User $user){ // implicit parameter
@@ -29,9 +58,10 @@ Route::get('/', function () {
 Route::middleware('auth')->group(function () {
     Route::get('/profile', function () {
         return view('profile');
-    })->middleware('throttle:rate_limit');
+    })->name("profile")->middleware('throttle:rate_limit');
     Route::view('/dashboard', 'dashboard');
     Route::get('/pay', [PaymentController::class, 'pay']);
+    Route::post("/save-profile", [ProfileController::class, "save"]);
 });
 
 Route::middleware('guest')->group(function () {
