@@ -9,10 +9,16 @@ use App\Http\Controllers\TestController;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 // Route::redirect('/', '/name');
 
@@ -20,11 +26,76 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome', ['name' => $name]);
 // })->where(['name' => '[a-zA-Z]+']);
 
+
+
 Route::get('/', function (Request $request) {
     config(['app.timezone' => 'Asia/Dhaka']);
     dump(config("app.timezone"));
     dump(App::environment());
     return view('welcome');
+});
+
+Route::get("/str-helpers", function () {
+    $password = "Hakim@123";
+    dump(Str::limit('I am Hakim a web developer.', 10));
+    dump(Str::mask($password, "*", 0));
+    dump(Str::mask($password, "*", -10, 2));
+    dump(Str::length($password));
+    dump(Str::password(16, true, true, true, false));
+    dump(Str::plural("cat"));
+    dump(Str::singular("cats"));
+    dump(Str::slug("I had cats", '-'));
+});
+Route::get("/helpers", function () {
+    dump(public_path("storage/uploads"));
+    dump(app_path());
+    dump(base_path());
+    dump(config_path());
+    dump(config_path());
+    dump(action([TestController::class, "index"], ['test' => 1]));
+    dump(route("response"));
+    dump(url("user/profile", [1, 2, 3]));
+    dump(url()->current());
+    dump(url()->full());
+});
+Route::get("/collection", function () {
+    $arr = [
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        1,
+        2,
+        3,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        4,
+        5,
+        6
+    ];
+    $collection = collect($arr)->map(function ($value, $key) {
+        return $value * 3;
+    })
+        ->filter(function ($value, $key) {
+            return $value % 2 == 0;
+        })
+        ->reject(function ($value, $key) {
+            return $value > 40;
+        })
+        ->sort();
+
+    $collection->dump();
+    dump($collection->count());
+    dump($collection->sum());
+    dump($collection->avg());
 });
 
 Route::get("/response/{user?}", function (Request $request, User $user) {
@@ -78,6 +149,12 @@ Route::middleware('auth')->group(function () {
     Route::view('/dashboard', 'dashboard');
     Route::get('/pay', [PaymentController::class, 'pay']);
     Route::post("/save-profile", [ProfileController::class, "save"]);
+    Route::post("/logout", function (Request $request) {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerate();
+        return redirect("/");
+    })->name("logout");
 });
 
 Route::middleware('guest')->group(function () {

@@ -7,6 +7,10 @@
         @auth
             <a href="/dashboard">Dashboard</a>
             <a href="/profile">Profile</a>
+            <form method="POST" action="{{ route('logout') }}" style="display:inline;">
+                @csrf
+                <button type="submit">Logout</button>
+            </form>
         @endauth
         @guest
             <a href="/login">Login</a>
