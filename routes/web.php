@@ -9,12 +9,14 @@ use App\Http\Controllers\TestController;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Benchmark;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Lottery;
 use Illuminate\Support\Number;
 use Illuminate\Support\Str;
 
@@ -49,6 +51,34 @@ Route::get("/str-helpers", function () {
     dump(Str::slug("I had cats", '-'));
     dump(Str::reverse("I had cats"));
 });
+Route::get("/benchmark", function () {
+    // Benchmark::dd([
+    //     'Scenario 1' => fn() => app(),
+    //     'Scenario 2' => fn() => auth(),
+    //     'Scenario 3' => fn() => app("App\Services\CardPaymentService")->pay(),
+    //     'Scenario 4' => fn() => sleep(1),
+    //     'Scenario 5' => fn() => User::count(),
+    // ]);
+    dump(Lottery::odds(1, 10)->choose());
+    dump(Lottery::odds(1, 10)
+        ->winner(fn() => 'You Win!')
+        ->loser(fn() => 'You Lose!')
+        ->choose());
+
+    function random(): int
+    {
+        return once(function () {
+            return random_int(1, 100);
+        });
+    }
+
+    // Same number (result) returned twice
+    dump(random());
+    dump(random());
+
+    dd("Die and Dump");
+    echo "Nothing";
+});
 Route::get("/helpers", function () {
     dump(public_path("storage/uploads"));
     dump(app_path());
@@ -72,6 +102,10 @@ Route::get("/helpers", function () {
     dump(Number::forHumans(1000000, 2));
     dump(Number::forHumans(100547, 2));
     dump(now()->addDays(1));
+    dump("------------------------------------------------");
+    dump(csrf_field());
+    dump(method_field("PUT"));
+    dump("------------------------------------------------");
 });
 Route::get("/collection", function () {
     $arr = [
