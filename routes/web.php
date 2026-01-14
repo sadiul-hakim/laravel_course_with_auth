@@ -20,6 +20,8 @@ use Illuminate\Support\Lottery;
 use Illuminate\Support\Number;
 use Illuminate\Support\Str;
 
+use function Symfony\Component\Clock\now;
+
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -32,10 +34,12 @@ error_reporting(E_ALL);
 
 
 
-Route::get('/', function (Request $request) {
+Route::get('/{local?}', function (Request $request, string $local = "en") {
     config(['app.timezone' => 'Asia/Dhaka']);
     dump(config("app.timezone"));
     dump(App::environment());
+    dump(now());
+    App::setLocale($local);
     return view('welcome');
 });
 

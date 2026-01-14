@@ -18,7 +18,7 @@
     <x-navbar />
     <x-class-component>
         <x-slot:title>
-            <h1>Home Page</h1>
+            <h1>{{ __('welcome.title') }}</h1>
         </x-slot:title>
     </x-class-component>
     @php
