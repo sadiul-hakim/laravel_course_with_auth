@@ -8,12 +8,14 @@ use App\Http\Controllers\SQLMonitoringController;
 use App\Http\Controllers\TestController;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Number;
 use Illuminate\Support\Str;
 
 ini_set('display_errors', 1);
@@ -45,6 +47,7 @@ Route::get("/str-helpers", function () {
     dump(Str::plural("cat"));
     dump(Str::singular("cats"));
     dump(Str::slug("I had cats", '-'));
+    dump(Str::reverse("I had cats"));
 });
 Route::get("/helpers", function () {
     dump(public_path("storage/uploads"));
@@ -57,6 +60,18 @@ Route::get("/helpers", function () {
     dump(url("user/profile", [1, 2, 3]));
     dump(url()->current());
     dump(url()->full());
+    dump("------------------------------------------------");
+    dump(app());
+    app("App\Services\CardPaymentService")->pay(); // Loads CardPaymentService from service provider
+    dump(auth()->user());
+    dump(config("app.timezone"));
+    dump(env("APP_ENV", "production"));
+    dump(fake('en')->firstName());
+    dump(fake()->email());
+    dump(Arr::query(['name' => 'Hakim', 'age' => 21]));
+    dump(Number::forHumans(1000000, 2));
+    dump(Number::forHumans(100547, 2));
+    dump(now()->addDays(1));
 });
 Route::get("/collection", function () {
     $arr = [
