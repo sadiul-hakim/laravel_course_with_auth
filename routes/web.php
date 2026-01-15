@@ -6,7 +6,9 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SQLMonitoringController;
 use App\Http\Controllers\TestController;
+use App\Http\Requests\CustomRequest;
 use App\Models\User;
+use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Benchmark;
@@ -254,6 +256,37 @@ Route::resource('test', TestController::class)->except(['create', 'store', 'upda
 Route::get('/invoke', InvokableController::class); // No need to provide method name. __invoke method would be called.
 
 Route::get('/monitor-sql', [SQLMonitoringController::class, 'monitor']);
+
+Route::prefix("form")->group(function () {
+    Route::view("/page", "validation.form");
+    Route::post("/validation-custom-request/{param?}", function (CustomRequest $request) {
+        dump($request->validated());
+    });
+    Route::post("/validation", function (Request $request) {
+        $request->validate([
+            'email' => 'required|email|min:10|max:55|unique:users',
+            'name' => 'required|min:6|max:45',
+            // 'name' => 'required|size:12',
+            // 'phone' => 'integer|size:11',
+            // 'languages' => 'array|size:2',
+            'file' => 'required|image',
+            // 'file' => 'file|size:512',
+            // 'password' => 'current_password',
+            'password' => 'required|min:8|max:16',
+            'publish_at' => 'nullable|date',
+            'date_of_birth' => 'required|date|before:today',
+            'payment_type' => 'required',
+            'card_number' => 'required_if:payment_type,cc'
+        ], [
+            'file.image' => "File must be an image"
+        ]);
+    });
+    Route::post("/validation-json", function (Request $request) {
+        $request->validate([
+            'author.description' => "required"
+        ]);
+    })->withoutMiddleware(ValidateCsrfToken::class);
+});
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
