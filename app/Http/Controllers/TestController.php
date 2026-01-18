@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\EntityNotFoundException;
+use App\Models\User;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
 class TestController extends Controller
@@ -9,9 +12,13 @@ class TestController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(int $userId)
     {
-        //
+        try {
+            return User::findOrFail($userId);
+        } catch (ModelNotFoundException $ex) {
+            throw new EntityNotFoundException("User $userId is not found.");
+        }
     }
 
     /**

@@ -36,7 +36,7 @@ error_reporting(E_ALL);
 
 
 
-Route::get('/{local?}', function (Request $request, string $local = "en") {
+Route::get('/lang/{local?}', function (Request $request, string $local = "en") {
     config(['app.timezone' => 'Asia/Dhaka']);
     dump(config("app.timezone"));
     dump(App::environment());
@@ -304,6 +304,8 @@ if (app()->environment('local')) { // only in dev
     });
 }
 
-Route::fallback(function () {
-    return view('not_found');
-});
+require_once __DIR__ . "/revise.php";
+
+// Route::fallback(function () {
+//     return view('not_found');
+// });
