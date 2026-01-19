@@ -1,10 +1,13 @@
 <?php
 
 use App\Http\Controllers\TestController;
+use App\Mail\TestMail;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Process;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schedule;
 use Illuminate\Support\Facades\Storage;
@@ -68,6 +71,21 @@ Route::get("/flush-cache", function () {
     Cache::flush();
 });
 
+Route::get("/send-mail", function () {
+    Mail::to("sadiulhakim@gmail.com")->send(new TestMail("Test", "Test"));
+});
+Route::get("/process", function () {
+    $process = Process::start("pwd");
+    // $process = Process::run("pwd");
+    while ($process->running()) {
+        dump("Running........");
+    }
+
+    $result = $process->wait();
+    // $result = $process->output();
+    dump($result);
+});
+
 Route::get("/play-with-storage", function () {
     // Storage::disk("public")->append("folder1/example.txt", "Hi");
     // return Storage::disk("public")->download("folder1/example.txt");
@@ -79,13 +97,14 @@ Route::get("/play-with-storage", function () {
 
 Schedule::call(function () {
     Storage::disk("public")->append("folder1/example.txt", "Hi");
-})->everyFiveSeconds();
+})->everyMinute();
 
 Route::middleware("cache.headers:public;max_age=2628000;etag")->group(function () {
     Route::get("http-cache", function () {
         return "http-cache";
     });
 });
+
 
 
 // emergency, alert, critical, error, warning, notice, info, debug
