@@ -3,7 +3,10 @@
 use App\Events\CommentAddedEvent;
 use App\Events\ExampleEvent;
 use App\Events\PostAddedEvent;
+use App\Notifications\ExampleNotifcation;
 use App\Order;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Route;
 
 Route::get("/event", function () {
@@ -21,6 +24,21 @@ Route::get("/event", function () {
     return "event dispatched";
 });
 
+Route::get("/notifications", function (Request $req) {
+    // $invoice = new class {
+    //     public string $status = "Paid";
+    // };
+
+    $invoice = ['status' => 'Paid'];
+
+    Notification::send($req->user(), new ExampleNotifcation($invoice));
+})->middleware("auth");
+
+Route::get("/get-notifications", function (Request $req) {
+    foreach ($req->user()->notifications as $noti) {
+        dump($noti['data']);
+    }
+})->middleware("auth");
 Route::get("/subscribers", function () {
 
     $post = new class {

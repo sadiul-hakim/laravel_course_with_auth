@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Events\ExampleEvent;
 use App\Http\Controllers\PaymentController;
+use App\Listeners\BlogSubscriber;
 use App\Listeners\ExampleListener;
 use App\Services\PayoneerPaymentService;
 use App\View\Composers\TestComposer;
@@ -53,5 +54,6 @@ class AppServiceProvider extends ServiceProvider
 
 
         // Event::listen(ExampleEvent::class,ExampleListener::class);
+        // Event::subscribe(BlogSubscriber::class);
     }
 }
