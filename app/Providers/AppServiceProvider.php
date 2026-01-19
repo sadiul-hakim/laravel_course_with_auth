@@ -2,12 +2,15 @@
 
 namespace App\Providers;
 
+use App\Events\ExampleEvent;
 use App\Http\Controllers\PaymentController;
+use App\Listeners\ExampleListener;
 use App\Services\PayoneerPaymentService;
 use App\View\Composers\TestComposer;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
@@ -47,5 +50,8 @@ class AppServiceProvider extends ServiceProvider
         //     $view->with('text_key', 'text_value');
         // });
         // View::share("key","value"); // for all views
+
+
+        // Event::listen(ExampleEvent::class,ExampleListener::class);
     }
 }

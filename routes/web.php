@@ -305,6 +305,7 @@ if (app()->environment('local')) { // only in dev
 }
 
 require_once __DIR__ . "/revise.php";
+require_once __DIR__ . "/event.php";
 
 // Route::fallback(function () {
 //     return view('not_found');
