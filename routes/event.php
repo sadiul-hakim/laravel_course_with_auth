@@ -36,6 +36,12 @@ Route::get("/notifications", function (Request $req) {
 
 Route::get("/get-notifications", function (Request $req) {
     foreach ($req->user()->notifications as $noti) {
+        $noti->markAsRead();
+        dump($noti['data']);
+    }
+
+    foreach ($req->user()->unreadNotifications as $noti) {
+        $noti->markAsRead();
         dump($noti['data']);
     }
 })->middleware("auth");
