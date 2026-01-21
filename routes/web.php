@@ -12,6 +12,8 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+Route::redirect("/", "/dashboard");
+
 // auth is a built-in middleware for authentication. It protects the protected routes. It redirects to GET /login router if not authenticated/
 // Laravel looks to GET /login route if user is not authenticated and redirects.
 Route::middleware('auth')->group(function () {
