@@ -12,7 +12,6 @@
     <div>
         <x-navbar />
         <h1>Profile</h1>
-        <p>{{ $test_key }}</p>
     </div>
     @if (session('message'))
         <div style="background-color: lightgreen; color:green;padding:10px; margin:10px 0;text-align: center;">

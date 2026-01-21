@@ -12,7 +12,7 @@
     <div>
         <x-navbar />
         Dashboard
-        <p>{{ $test_key }}</p>
+
     </div>
 
 </body>

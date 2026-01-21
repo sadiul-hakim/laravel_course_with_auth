@@ -2,21 +2,11 @@
 
 namespace App\Providers;
 
-use App\Events\ExampleEvent;
-use App\Http\Controllers\PaymentController;
-use App\Listeners\BlogSubscriber;
-use App\Listeners\ExampleListener;
-use App\Services\PayoneerPaymentService;
-use App\View\Composers\TestComposer;
 use Illuminate\Cache\RateLimiting\Limit;
-use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\View\View as IlluminateView;
 
 // Service Providers are executed every time a request is sent
 class AppServiceProvider extends ServiceProvider
@@ -24,14 +14,7 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Register any application services.
      */
-    public function register(): void
-    {
-        $this->app->bind(PaymentController::class, PayoneerPaymentService::class);
-        // $this->app->singleton(PaymentController::class, PayoneerPaymentService::class);
-        //     $this->app->when(PaymentController::class)
-        //         ->needs(PaymentService::class)
-        //         ->give(PayoneerPaymentService::class);
-    }
+    public function register(): void {}
 
     /**
      * Bootstrap any application services.
@@ -43,17 +26,5 @@ class AppServiceProvider extends ServiceProvider
             // return $request -> user() && $request -> user() -> id === 100 ? Limit::none() : Limit::perMinute(2) -> by($request -> user());
             return Limit::perMinute(5)->by($request->user() ? $request->user() : $request->ip());
         });
-
-        View::composer(['dashboard', 'profile'], TestComposer::class);
-
-        // or
-        // View::composer(['dashboard', 'profile'], function (IlluminateView $view) {
-        //     $view->with('text_key', 'text_value');
-        // });
-        // View::share("key","value"); // for all views
-
-
-        // Event::listen(ExampleEvent::class,ExampleListener::class);
-        // Event::subscribe(BlogSubscriber::class);
     }
 }

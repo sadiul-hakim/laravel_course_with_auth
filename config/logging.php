@@ -57,10 +57,10 @@ return [
             'channels' => explode(',', (string) env('LOG_STACK', 'single')),
             'ignore_exceptions' => false,
         ],
-        'myChannel' => [
-            'driver' => 'single',
+        'sql_queries' => [
+            'driver' => 'daily',
             'ignore_exceptions' => false,
-            'path' => storage_path('logs/myChannel.log')
+            'path' => storage_path('logs/sql_queries.log')
         ],
         'single' => [
             'driver' => 'single',

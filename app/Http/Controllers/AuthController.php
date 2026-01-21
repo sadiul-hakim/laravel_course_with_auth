@@ -8,18 +8,19 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    public function login(Request $request){
+    public function login(Request $request)
+    {
         // TODO: Make service class
-        $validated = $request -> validate([
-            'email'=>'required:max:55|email',
-            'password'=>'required|min:6|max:16'
+        $validated = $request->validate([
+            'email' => 'required:max:55|email',
+            'password' => 'required|min:6|max:16'
         ]);
 
-        if(!Auth::attempt($validated)){
+        if (!Auth::attempt($validated)) {
             throw new AuthenticationException();
         }
 
-        $request -> session() -> regenerate();
-        return redirect("/");
+        $request->session()->regenerate();
+        return redirect("/dashboard");
     }
 }

@@ -3,7 +3,7 @@
     <a href="/" style="margin-right: 100px;">Logo</a>
     <div>
 
-        <a href="/">Home</a>
+        <a href="/dashboard">Home</a>
         @auth
             <a href="/dashboard">Dashboard</a>
             <a href="/profile">Profile</a>
