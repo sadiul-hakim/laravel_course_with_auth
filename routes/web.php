@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
+use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -36,6 +37,8 @@ Route::middleware('guest')->group(function () {
     Route::view('/register', 'register')->name('register');
 });
 
+require_once __DIR__ . "/db_routes.php";
+
 
 if (app()->environment('local')) { // only in dev
     DB::listen(function ($query) {
@@ -47,6 +50,11 @@ if (app()->environment('local')) { // only in dev
         );
 
         Log::channel("sql_queries")->info("[SQL] {$sql} ({$query->time} ms)");
+    });
+
+    DB::whenQueryingForLongerThan(500, function ($connection, QueryExecuted $event) {
+        Log::channel("sql_queries")->warning("[SQL] Long Running Query :: {$event->sql} took {$connection->totalQueryDuration()} ms");
+        dump($event, $connection);
     });
 }
 
