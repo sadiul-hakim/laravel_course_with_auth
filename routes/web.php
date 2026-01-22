@@ -54,7 +54,6 @@ if (app()->environment('local')) { // only in dev
 
     DB::whenQueryingForLongerThan(500, function ($connection, QueryExecuted $event) {
         Log::channel("sql_queries")->warning("[SQL] Long Running Query :: {$event->sql} took {$connection->totalQueryDuration()} ms");
-        dump($event, $connection);
     });
 }
 
