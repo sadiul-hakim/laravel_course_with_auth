@@ -57,7 +57,6 @@ if (app()->environment('local')) { // only in dev
     });
 }
 
-
 // Route::fallback(function () {
 //     return view('not_found');
 // });

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,5 +23,13 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
         return redirect("/dashboard");
+    }
+
+    public function register(Request $request)
+    {
+        $validated = $request->validate([
+            'email' => 'required:max:55|email',
+            'password' => 'required|min:6|max:16'
+        ]);
     }
 }

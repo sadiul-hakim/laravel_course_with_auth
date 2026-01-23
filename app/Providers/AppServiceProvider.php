@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Post;
+use App\Observers\PostObserver;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
@@ -26,5 +28,6 @@ class AppServiceProvider extends ServiceProvider
             // return $request -> user() && $request -> user() -> id === 100 ? Limit::none() : Limit::perMinute(2) -> by($request -> user());
             return Limit::perMinute(5)->by($request->user() ? $request->user() : $request->ip());
         });
+        Post::observe(PostObserver::class);
     }
 }
