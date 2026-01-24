@@ -116,5 +116,7 @@ class User extends Authenticatable
     public function image()
     {
         return $this->morphOne(Image::class, "imageable");
+        // return $this->morphOne(Image::class, "imageable")->latestOfMany();
+        // return $this->morphMany(Image::class, "imageable");
     }
 }

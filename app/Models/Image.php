@@ -12,6 +12,7 @@ class Image extends Model
 
     public function imageable()
     {
+        // One image suppose id 1 either belongs to User or Post
         return $this->morphTo();
         // return $this->morphTo(__FUNCTION__, 'imageable_type', 'imageable_id');
     }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Image;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -57,5 +58,10 @@ Route::middleware("auth")->group(function () {
 
     Route::get("/users-roles", function () {
         dump(User::find(1)->roles);
+    });
+
+    Route::get("/images", function () {
+        dump(Image::find(1));
+        dump(User::find(1)->image);
     });
 });

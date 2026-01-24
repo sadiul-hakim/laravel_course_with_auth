@@ -26,5 +26,11 @@ class Post extends Model
     public function image()
     {
         return $this->morphOne(Image::class, "imageable");
+        // return $this->morphMany(Image::class, "imageable");
+    }
+
+    public function tags()
+    {
+        return $this->morphToMany(Tag::class, "taggable", "taggables");
     }
 }
