@@ -46,4 +46,12 @@ Route::middleware("auth")->group(function () {
         // }));
         dump(DB::select("select * from users where id = ? and sleep(1)", [1]));
     });
+
+    Route::get("/users-latest-post", function () {
+        dump(User::find(1)->latestPost->likes);
+    });
+
+    Route::get("/users-invoices", function () {
+        dump(User::find(1)->invoices);
+    });
 });

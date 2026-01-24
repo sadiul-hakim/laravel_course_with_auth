@@ -41,20 +41,38 @@ require_once __DIR__ . "/db_routes.php";
 
 
 if (app()->environment('local')) { // only in dev
-    DB::listen(function ($query) {
-        // Format query with bindings
-        $sql = str_replace(
-            array_map(fn($k) => '?', $query->bindings),
-            array_map(fn($b) => "'{$b}'", $query->bindings),
-            $query->sql
-        );
+    try {
+        DB::listen(function ($query) {
+            $bindings = array_map(function ($binding) {
+                if ($binding instanceof \DateTimeInterface) {
+                    return "'" . $binding->format('Y-m-d H:i:s') . "'";
+                }
 
-        Log::channel("sql_queries")->info("[SQL] {$sql} ({$query->time} ms)");
-    });
+                if (is_string($binding)) {
+                    return "'{$binding}'";
+                }
 
-    DB::whenQueryingForLongerThan(500, function ($connection, QueryExecuted $event) {
-        Log::channel("sql_queries")->warning("[SQL] Long Running Query :: {$event->sql} took {$connection->totalQueryDuration()} ms");
-    });
+                if (is_null($binding)) {
+                    return 'NULL';
+                }
+
+                return $binding;
+            }, $query->bindings);
+
+            $sql = vsprintf(
+                str_replace('?', '%s', $query->sql),
+                $bindings
+            );
+
+            Log::channel('sql_queries')->info("[SQL] {$sql} ({$query->time} ms)");
+        });
+
+        DB::whenQueryingForLongerThan(500, function ($connection, QueryExecuted $event) {
+            Log::channel("sql_queries")->warning("[SQL] Long Running Query :: {$event->sql} took {$connection->totalQueryDuration()} ms");
+        });
+    } catch (Exception $ex) {
+        Log::error($ex->getMessage());
+    }
 }
 
 // Route::fallback(function () {

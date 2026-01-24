@@ -13,4 +13,13 @@ class Post extends Model
     use SoftDeletes;
 
     protected $fillable = ["title", "content"];
+    protected $casts = [
+        'metadata' => 'array'
+    ];
+
+    public function user()
+    {
+        //belongsTo() means “this model holds the foreign key” — not how many records exist on the other side.
+        return $this->belongsTo(User::class);
+    }
 }

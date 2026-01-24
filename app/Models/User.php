@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -44,5 +46,58 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function passport()
+    {
+        return $this->hasOne(Passport::class, "user_id", "id");
+        // class,foreign_key,local_key
+    }
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+
+    public function latestPost()
+    {
+        // return $this->hasOne(Post::class)->latestOfMany();
+        // return $this->hasOne(Post::class)->ofMany('id', 'max');
+        // return $this->hasOne(Post::class)->oldestOfMany();
+        // return $this->hasOne(Post::class)->ofMany([
+        //     'likes' => 'max',
+        //     'id' => 'max'
+        // ]);
+        return $this->hasOne(Post::class)->ofMany([
+            'likes' => 'max',
+            'id' => 'max'
+        ], function (Builder $builder) {
+            $builder->where('created_at', "<", now()->subYears(1));
+        });
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    public function invoice()
+    {
+        return $this->hasOneThrough(
+            Invoice::class,
+            Order::class,
+            'user_id', // Optional, foreign key on order table
+            'order_id', // Optional, foreign key on invoice table
+            'id', // Optional, local key on order table
+            'id' // Optional, local key on invoice table
+        );
+    }
+
+    public function invoices()
+    {
+        return $this->hasManyThrough(
+            Invoice::class,
+            Order::class
+        );
     }
 }

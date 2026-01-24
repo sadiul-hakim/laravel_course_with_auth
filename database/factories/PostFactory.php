@@ -16,9 +16,15 @@ class PostFactory extends Factory
      */
     public function definition(): array
     {
+        $date = fake()->dateTimeBetween('-3 years', '-1 week');
         return [
             'title' => fake()->sentence(10),
-            'content' => fake()->paragraph(15)
+            'content' => fake()->paragraph(15),
+            'created_at' => $date,
+            'updated_at' => $date,
+            'views' => $this->faker->numberBetween(0, 100),
+            'likes' => $this->faker->numberBetween(0, 20),
+            'metadata' => ['author' => 'Hakim', 'tags' => ['laravel', 'php 8']]
         ];
     }
 }
