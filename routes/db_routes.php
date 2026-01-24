@@ -54,4 +54,8 @@ Route::middleware("auth")->group(function () {
     Route::get("/users-invoices", function () {
         dump(User::find(1)->invoices);
     });
+
+    Route::get("/users-roles", function () {
+        dump(User::find(1)->roles);
+    });
 });

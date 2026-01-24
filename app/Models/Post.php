@@ -22,4 +22,9 @@ class Post extends Model
         //belongsTo() means “this model holds the foreign key” — not how many records exist on the other side.
         return $this->belongsTo(User::class);
     }
+
+    public function image()
+    {
+        return $this->morphOne(Image::class, "imageable");
+    }
 }

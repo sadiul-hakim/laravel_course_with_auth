@@ -100,4 +100,21 @@ class User extends Authenticatable
             Order::class
         );
     }
+
+    public function roles()
+    {
+        return $this->belongsToMany(
+            Role::class,
+            'role_user', //Optional, table name
+            'user_id', //Optional
+            'role_id' //Optional
+        );
+        // -> withPivot("id") // By default created_at, updated_at, user_id, role_id are available, if the pivot table contains extra info we need to mention while making relation
+
+    }
+
+    public function image()
+    {
+        return $this->morphOne(Image::class, "imageable");
+    }
 }
