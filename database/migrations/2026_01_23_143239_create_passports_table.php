@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string("passport_number");
             $table->string("issuing_country");
             $table->dateTime("expiry_date");
-            $table->unsignedBigInteger("user_id");
+            $table->unsignedBigInteger("user_id")->nullable();
             $table->foreign("user_id")->references("id")->on("users")->onDelete("cascade");
             $table->timestamps();
         });

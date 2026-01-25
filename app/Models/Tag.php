@@ -10,6 +10,8 @@ class Tag extends Model
     /** @use HasFactory<\Database\Factories\TagFactory> */
     use HasFactory;
 
+    protected $fillable = ['name'];
+
     public function posts()
     {
         // One tag suppose id 1 can belong to multiple Posts or Videos or any other model `taggable_type`

@@ -1,7 +1,11 @@
 <?php
 
 use App\Models\Image;
+use App\Models\Passport;
+use App\Models\Post;
+use App\Models\Tag;
 use App\Models\User;
+use App\Models\Video;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
@@ -63,5 +67,67 @@ Route::middleware("auth")->group(function () {
     Route::get("/images", function () {
         dump(Image::find(1));
         dump(User::find(1)->image);
+    });
+
+    Route::get("/remove-relation", function () {
+        $passport = Passport::find(1);
+        $passport->user()->dissociate();
+    });
+    Route::post("/save-video", function () {
+        $user = User::find(1);
+        $passport = new Passport([
+            'expiry_date' => now()->addYear(),
+            'issuing_country' => 'Bangladesh',
+            'passport_number' => 'DF123445'
+        ]);
+
+        $passport->user()->associate($user);
+        $passport->save();
+    });
+    Route::get("/save-role", function () {
+        $user = User::find(1);
+        $user->roles()->attach(4); // role id
+        // $user->roles()->sync([2,4]); // role id
+        // $user->roles()->detach(4);
+        $post = Post::find(1);
+    });
+    Route::post("/save-video", function () {
+        $video = Video::create(
+            [
+                'title' => 'test',
+                'url' => 'test'
+            ]
+        );
+
+        $tag = new Tag(['name' => 'test']);
+        $video->tags()->save($tag);
+        $video->tags()->saveMany([
+            new Tag(['name' => 'test1']),
+            new Tag(['name' => 'test2'])
+        ]);
+        $video->tags()->create(['name' => 'test']);
+    });
+
+    Route::get("update-user", function () {
+        // User::where('email', 'block.esmeralda@example.org')
+        //     ->update(
+        //         [
+        //             'name' => 'new name'
+        //         ]
+        //     );
+        // User::updateOrCreate(
+        //     ['email' => 'sadiulhakim@gmail.com'],
+        //     [
+        //         'name' => 'Sadi',
+        //         'email' => 'sadiulhakim@gmail.com',
+        //         'password' => encrypt('hakim@123')
+        //     ]
+        // );
+
+        $post = Post::find(1);
+        $metadata = $post->metadata;
+        $metadata['author'] = 'new author';
+        $post->metadata = $metadata;
+        $post->save();
     });
 });
