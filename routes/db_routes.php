@@ -108,7 +108,15 @@ Route::middleware("auth")->group(function () {
         $video->tags()->create(['name' => 'test']);
     });
 
-    Route::get("update-user", function () {
+    Route::get("delete", function () {
+        // User::find(4)->delete();
+        $post = Post::find(2);
+        $metadata = $post->metadata;
+        unset($metadata['author']);
+        $post->metadata = $metadata;
+        $post->save();
+    });
+    Route::get("update", function () {
         // User::where('email', 'block.esmeralda@example.org')
         //     ->update(
         //         [
