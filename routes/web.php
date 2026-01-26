@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Http\Request;
+use Illuminate\Support\Benchmark;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
@@ -19,6 +20,7 @@ Route::redirect("/", "/dashboard");
 // Laravel looks to GET /login route if user is not authenticated and redirects.
 Route::middleware('auth')->group(function () {
     Route::get('/profile', function () {
+
         return view('profile');
     })->name("profile")->middleware('throttle:rate_limit');
     Route::view('/dashboard', 'dashboard');

@@ -138,4 +138,18 @@ Route::middleware("auth")->group(function () {
         $post->metadata = $metadata;
         $post->save();
     });
+
+    Route::get("query-builder", function () {
+        // dump(DB::table("users")->where("name", "new name")->value("email"));
+        // dump(DB::table("users")->find(3));
+        // dump(DB::table("users")->get(["name"]));
+        // dump(DB::table("users")->pluck("email"));
+        // dump(DB::table("users")->select("name", "email as mail")->get());
+        // dump(DB::table("users")->distinct()->get());
+        // dump(DB::table("posts")->whereBetween("likes", [1, 100])->get());
+        // dump(DB::table("posts")->whereIn("id", [1, 2, 3, 4, 5, 6, 7, 8])->get());
+        // dump(DB::table("users")->whereNull("email_verified_at")->get());
+        dump(DB::table("posts")->whereJsonContains('metadata->tags', 'php 8')->get());
+        dump(DB::table("posts")->where('metadata->author', 'new author')->get());
+    });
 });
